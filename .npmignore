@@ -1,0 +1,43 @@
+# Source files (we only publish dist/)
+src/
+tsconfig.json
+
+# Development files
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Configuration
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation (keeping only README.md)
+docs/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp

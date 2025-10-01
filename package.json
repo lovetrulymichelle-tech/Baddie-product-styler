@@ -1,0 +1,40 @@
+{
+  "name": "baddie-product-styler",
+  "version": "1.0.0",
+  "description": "Baddie-product-styler is a tool designed for resellers and online sellers who want to streamline their sales process. If you're looking to sell items without the heavy lifting of manual setup, this tool helps automate and simplify the tasks involved in listing and managing products.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "reseller",
+    "product",
+    "styler",
+    "online-selling",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lovetrulymichelle-tech/Baddie-product-styler.git"
+  }
+}
