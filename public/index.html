@@ -247,6 +247,33 @@
             </div>
 
             <div class="form-group">
+                <label for="originalPrice">Original Price (optional)</label>
+                <input type="number" id="originalPrice" placeholder="599.99" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="productCondition">Condition (optional)</label>
+                <select id="productCondition">
+                    <option value="">Select condition...</option>
+                    <option value="New/Mint">New/Mint</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productBrand">Brand (optional)</label>
+                <input type="text" id="productBrand" placeholder="e.g., Coach, Nike">
+            </div>
+
+            <div class="form-group">
+                <label for="imageUrls">Image URLs (optional, one per line)</label>
+                <textarea id="imageUrls" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
                 <label for="styleTemplate">Style Template</label>
                 <select id="styleTemplate">
                     <option value="modern">Modern - Trendy & Eye-catching</option>
@@ -285,6 +312,133 @@
     <div id="toast" class="toast">Copied to clipboard! ✓</div>
 
     <script>
+        // Helper functions
+        function formatPrice(price, currency = '$') {
+            return `${currency}${parseFloat(price).toFixed(2)}`;
+        }
+
+        function generateShortDescription(description) {
+            if (!description) return '';
+            
+            const firstSentence = description.match(/^[^.!?]+[.!?]/);
+            if (firstSentence && firstSentence[0].length <= 100) {
+                return firstSentence[0].trim();
+            }
+            
+            if (description.length <= 100) {
+                return description.trim();
+            }
+            
+            return description.substring(0, 97).trim() + '...';
+        }
+
+        function generateLongDescription(product, template) {
+            let longDesc = product.description || '';
+            
+            if (product.condition) {
+                longDesc += `\n\nCondition: ${product.condition}`;
+            }
+            
+            if (product.brand) {
+                longDesc += `\n\nBrand: ${product.brand}`;
+            }
+            
+            switch (template) {
+                case 'modern':
+                    longDesc += '\n\n✨ This is a premium piece perfect for those who appreciate quality and style.\n🔥 Don\'t miss out on this limited opportunity!\n💎 Carefully curated for discerning buyers.';
+                    break;
+                case 'classic':
+                    longDesc += '\n\nA timeless piece that combines quality with value.\nPerfect addition to any collection.';
+                    break;
+                case 'minimal':
+                    longDesc += '\n\nQuality item. Well maintained. Ready for its next owner.';
+                    break;
+            }
+            
+            return longDesc;
+        }
+
+        function generatePricingGuidance(product) {
+            const price = parseFloat(product.price) || 0;
+            const originalPrice = parseFloat(product.originalPrice) || price * 2;
+            const condition = product.condition || 'good';
+            
+            const minPrice = Math.round(price * 0.85 * 100) / 100;
+            const maxPrice = Math.round(price * 1.15 * 100) / 100;
+            
+            let conditionMultiplier = 0.6;
+            if (condition.toLowerCase().includes('new') || condition.toLowerCase().includes('mint')) {
+                conditionMultiplier = 0.8;
+            } else if (condition.toLowerCase().includes('excellent') || condition.toLowerCase().includes('like new')) {
+                conditionMultiplier = 0.7;
+            } else if (condition.toLowerCase().includes('good')) {
+                conditionMultiplier = 0.6;
+            }
+            
+            const usedMarketPrice = Math.round(originalPrice * conditionMultiplier);
+            
+            return {
+                newPriceEquivalent: `Original retail price approximately ${formatPrice(originalPrice)}`,
+                usedMarketAssessment: `Typical used market value for this condition: ${formatPrice(usedMarketPrice - 20)} - ${formatPrice(usedMarketPrice + 20)}`,
+                highEndThriftJustification: `This item is priced as "high-end thrift" because it offers ${product.brand ? `${product.brand} ` : ''}quality at a fraction of retail cost, while being in ${condition} condition.`,
+                recommendedPriceRange: `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`,
+                whySuggestedPrice: `${formatPrice(price)} is recommended because it positions the item competitively in the resale market while reflecting its ${condition} condition and quality.`
+            };
+        }
+
+        function formatProductListing(styled) {
+            let output = `### Product Listing: ${styled.name}\n\n`;
+            
+            output += '**Product Images:**\n';
+            if (styled.imageUrls && styled.imageUrls.length > 0) {
+                styled.imageUrls.forEach((url, index) => {
+                    output += `[Image ${index + 1} URL/Embed - with chosen background]\n${url}\n`;
+                });
+            } else if (styled.imageUrl) {
+                output += `[Image 1 URL/Embed - with chosen background]\n${styled.imageUrl}\n`;
+            } else {
+                output += '[Image 1 URL/Embed - with chosen background]\n';
+                output += '[Image 2 URL/Embed - with chosen background]\n';
+                output += '[Image 3 URL/Embed - with chosen background]\n';
+            }
+            output += '(Each image displayed separately as requested)\n\n';
+            
+            output += '**Short Description:**\n';
+            output += `${styled.shortDescription}\n\n`;
+            
+            if (styled.recommendedPrice) {
+                output += `**Recommended Price:** ${formatPrice(styled.recommendedPrice)}\n\n`;
+            }
+            
+            output += '---\n\n';
+            output += '**Options for Your Listing:**\n\n';
+            output += '*   **Description Type:**\n';
+            output += `    *   **[Short Description]** (as above)\n`;
+            output += `    *   **[Long Description]** (See below for full text)\n`;
+            output += '*   **Price Selection:**\n';
+            if (styled.recommendedPrice) {
+                output += `    *   **[Recommended Price: ${formatPrice(styled.recommendedPrice)}]**\n`;
+            }
+            output += `    *   **[Custom Price]** (Refer to detailed pricing guidance below to choose your own)\n\n`;
+            
+            output += '---\n\n';
+            output += '**Full Product Description for IONOS/Website:**\n\n';
+            output += `**Product Title:** ${styled.name}\n\n`;
+            output += `${styled.longDescription}\n\n`;
+            
+            output += '---\n\n';
+            output += '**Detailed Pricing Guidance:**\n\n';
+            if (styled.pricingGuidance) {
+                output += `*   New Price Equivalent: ${styled.pricingGuidance.newPriceEquivalent}\n`;
+                output += `*   Used Market Assessment: ${styled.pricingGuidance.usedMarketAssessment}\n`;
+                output += `*   "High-End Thrift" Justification: ${styled.pricingGuidance.highEndThriftJustification}\n`;
+                output += `*   Recommended Price Range: ${styled.pricingGuidance.recommendedPriceRange}\n`;
+                output += `*   Why ${formatPrice(styled.recommendedPrice || 0)}?: ${styled.pricingGuidance.whySuggestedPrice}\n`;
+            }
+            
+            return output;
+        }
+
         // Product styling implementation
         function styleMyProduct(product, options = {}) {
             const template = options.template || 'modern';
@@ -307,25 +461,41 @@
                 styledDescription += '\n\n👑 Styled by Baddie Product Styler';
             }
 
-            return {
+            const shortDescription = generateShortDescription(product.description || '');
+            const longDescription = generateLongDescription(product, template);
+            const recommendedPrice = parseFloat(product.price) || 0;
+            const pricingGuidance = generatePricingGuidance(product);
+            
+            const result = {
                 ...product,
                 styledDescription,
-                template
+                template,
+                shortDescription,
+                longDescription,
+                recommendedPrice,
+                pricingGuidance
             };
-        }
-
-        function formatPrice(price, currency = '$') {
-            return `${currency}${parseFloat(price).toFixed(2)}`;
+            
+            result.formattedOutput = formatProductListing(result);
+            
+            return result;
         }
 
         // Form handling
         document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const imageUrlsText = document.getElementById('imageUrls').value.trim();
+            const imageUrls = imageUrlsText ? imageUrlsText.split('\n').map(url => url.trim()).filter(url => url) : [];
+
             const product = {
                 name: document.getElementById('productName').value,
                 description: document.getElementById('productDescription').value,
-                price: document.getElementById('productPrice').value
+                price: document.getElementById('productPrice').value,
+                originalPrice: document.getElementById('originalPrice').value,
+                condition: document.getElementById('productCondition').value,
+                brand: document.getElementById('productBrand').value,
+                imageUrls: imageUrls
             };
 
             const options = {
@@ -335,12 +505,8 @@
 
             const styled = styleMyProduct(product, options);
 
-            // Build output with price if provided
-            let output = `${styled.name}\n\n`;
-            if (product.price) {
-                output += `Price: ${formatPrice(product.price)}\n\n`;
-            }
-            output += styled.styledDescription;
+            // Use the formatted output
+            const output = styled.formattedOutput;
 
             // Display result
             document.getElementById('styledOutput').textContent = output;
