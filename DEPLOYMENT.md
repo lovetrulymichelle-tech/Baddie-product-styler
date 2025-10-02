@@ -2,6 +2,17 @@
 
 This guide explains how to deploy baddie-product-styler to npm.
 
+## Recent Improvements ✨
+
+Before deploying, note these recent enhancements:
+- ✅ Added comprehensive input validation
+- ✅ Created mobile-friendly web demo (works on all devices)
+- ✅ Added commercial licensing documentation
+- ✅ Improved error handling and edge case support
+- ✅ Enhanced documentation for mobile and commercial users
+
+Make sure to test the `demo/index.html` file works correctly before publishing!
+
 ## Prerequisites
 
 1. **npm Account**: Create an account at [npmjs.com](https://www.npmjs.com/)

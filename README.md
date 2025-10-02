@@ -2,6 +2,8 @@
 
 Baddie-product-styler is a tool designed for resellers and online sellers who want to streamline their sales process. If you're looking to sell items without the heavy lifting of manual setup, this tool helps automate and simplify the tasks involved in listing and managing products.
 
+⚡ **[Quick Start Guide](QUICKSTART.md)** - Get started in 5 minutes!
+
 ## Features
 
 - 🎨 Multiple styling templates (modern, classic, minimal)

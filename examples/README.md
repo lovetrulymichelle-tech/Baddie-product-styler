@@ -36,6 +36,14 @@ ES Modules example demonstrating:
 - Styling an inventory of products
 - Rotating through different templates
 
+### cdn-usage.html
+
+Browser-based example demonstrating:
+- Using without npm installation
+- CDN integration (for future use)
+- Mobile-friendly web usage
+- Interactive demo with button
+
 ## Creating Your Own Examples
 
 Feel free to create your own examples! The basic structure is:
