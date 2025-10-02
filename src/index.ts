@@ -41,9 +41,25 @@ export function styleMyProduct(
   };
 
   const productToStyle = product || defaultProduct;
+  
+  // Validate product name
+  if (!productToStyle.name || productToStyle.name.trim() === '') {
+    throw new Error('Product name is required and cannot be empty');
+  }
+  
+  // Validate price if provided
+  if (productToStyle.price !== undefined && (productToStyle.price < 0 || !isFinite(productToStyle.price))) {
+    throw new Error('Product price must be a valid positive number');
+  }
+  
   const template = options.template || 'modern';
 
-  let styledDescription = productToStyle.description || '';
+  let styledDescription = (productToStyle.description || '').trim();
+  
+  // Handle empty descriptions
+  if (!styledDescription) {
+    styledDescription = 'Quality product available for purchase';
+  }
 
   // Apply styling based on template
   switch (template) {
@@ -56,6 +72,9 @@ export function styleMyProduct(
     case 'minimal':
       styledDescription = `${styledDescription}\n\nSimple. Clean. Quality.`;
       break;
+    default:
+      // Fallback to modern template for any unexpected values
+      styledDescription = `✨ ${styledDescription} ✨\n🔥 LIMITED AVAILABILITY 🔥\n💎 Premium Quality`;
   }
 
   if (options.addBranding) {
@@ -76,6 +95,20 @@ export function styleMyProduct(
  * @returns Formatted price string
  */
 export function formatPrice(price: number, currency: string = '$'): string {
+  // Validate price
+  if (typeof price !== 'number' || !isFinite(price)) {
+    throw new Error('Price must be a valid number');
+  }
+  
+  if (price < 0) {
+    throw new Error('Price cannot be negative');
+  }
+  
+  // Validate currency
+  if (!currency || currency.trim() === '') {
+    currency = '$';
+  }
+  
   return `${currency}${price.toFixed(2)}`;
 }
 

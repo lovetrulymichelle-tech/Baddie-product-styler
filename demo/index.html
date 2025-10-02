@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Baddie Product Styler - Style your products for reselling">
+    <title>Baddie Product Styler - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .template-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .template-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .template-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            border: 1px solid #e0e0e0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .template-btn {
+                min-width: 90px;
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            .btn-primary {
+                font-size: 16px;
+            }
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        .pricing-link {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 8px;
+            border: 2px solid #ffc107;
+        }
+
+        .pricing-link a {
+            color: #856404;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👑 Baddie Product Styler</h1>
+        <p class="tagline">Style your products like a pro - perfect for resellers!</p>
+
+        <div class="pricing-link">
+            💼 Using for business? <a href="../PRICING.md" target="_blank">Check our commercial licenses</a>
+        </div>
+
+        <form id="stylerForm">
+            <div class="form-group">
+                <label for="productName">Product Name *</label>
+                <input type="text" id="productName" placeholder="e.g., Designer Handbag" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="Enter product description..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price ($)</label>
+                <input type="number" id="price" placeholder="299.99" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>Template Style</label>
+                <div class="template-selector">
+                    <button type="button" class="template-btn active" data-template="modern">
+                        ✨ Modern
+                    </button>
+                    <button type="button" class="template-btn" data-template="classic">
+                        📜 Classic
+                    </button>
+                    <button type="button" class="template-btn" data-template="minimal">
+                        🎯 Minimal
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="addBranding">
+                    <label for="addBranding" style="margin-bottom: 0;">Add Baddie branding</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Style My Product 🚀
+            </button>
+        </form>
+
+        <div class="result" id="result">
+            <h2>Styled Product <span class="emoji">✨</span></h2>
+            
+            <div class="result-item">
+                <div class="result-label">Product Name:</div>
+                <div class="result-value" id="resultName"></div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Price:</div>
+                <div class="result-value" id="resultPrice"></div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Styled Description:</div>
+                <div class="result-value" id="resultDescription"></div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Template Used:</div>
+                <div class="result-value" id="resultTemplate"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made with 💜 by Baddie Product Styler</p>
+            <p><a href="https://github.com/lovetrulymichelle-tech/Baddie-product-styler" target="_blank">View on GitHub</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Inline implementation of the product styler for demo purposes
+        function styleMyProduct(product, options = {}) {
+            const defaultProduct = {
+                name: 'Sample Product',
+                description: 'A great product for resale',
+                price: 0,
+            };
+
+            const productToStyle = product || defaultProduct;
+            
+            if (!productToStyle.name || productToStyle.name.trim() === '') {
+                throw new Error('Product name is required and cannot be empty');
+            }
+            
+            if (productToStyle.price !== undefined && (productToStyle.price < 0 || !isFinite(productToStyle.price))) {
+                throw new Error('Product price must be a valid positive number');
+            }
+            
+            const template = options.template || 'modern';
+            let styledDescription = (productToStyle.description || '').trim();
+            
+            if (!styledDescription) {
+                styledDescription = 'Quality product available for purchase';
+            }
+
+            switch (template) {
+                case 'modern':
+                    styledDescription = `✨ ${styledDescription} ✨\n🔥 LIMITED AVAILABILITY 🔥\n💎 Premium Quality`;
+                    break;
+                case 'classic':
+                    styledDescription = `${styledDescription}\n\nClassic Quality | Trusted by Thousands`;
+                    break;
+                case 'minimal':
+                    styledDescription = `${styledDescription}\n\nSimple. Clean. Quality.`;
+                    break;
+                default:
+                    styledDescription = `✨ ${styledDescription} ✨\n🔥 LIMITED AVAILABILITY 🔥\n💎 Premium Quality`;
+            }
+
+            if (options.addBranding) {
+                styledDescription += '\n\n👑 Styled by Baddie Product Styler';
+            }
+
+            return {
+                ...productToStyle,
+                styledDescription,
+                template,
+            };
+        }
+
+        function formatPrice(price, currency = '$') {
+            if (typeof price !== 'number' || !isFinite(price)) {
+                throw new Error('Price must be a valid number');
+            }
+            
+            if (price < 0) {
+                throw new Error('Price cannot be negative');
+            }
+            
+            if (!currency || currency.trim() === '') {
+                currency = '$';
+            }
+            
+            return `${currency}${price.toFixed(2)}`;
+        }
+
+        // Template selector logic
+        let selectedTemplate = 'modern';
+        const templateBtns = document.querySelectorAll('.template-btn');
+        
+        templateBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                templateBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedTemplate = btn.dataset.template;
+            });
+        });
+
+        // Form submission
+        document.getElementById('stylerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            try {
+                const productName = document.getElementById('productName').value.trim();
+                const description = document.getElementById('description').value.trim();
+                const priceInput = document.getElementById('price').value;
+                const addBranding = document.getElementById('addBranding').checked;
+
+                const product = {
+                    name: productName,
+                    description: description || undefined,
+                    price: priceInput ? parseFloat(priceInput) : undefined,
+                };
+
+                const styled = styleMyProduct(product, {
+                    template: selectedTemplate,
+                    addBranding: addBranding
+                });
+
+                // Display results
+                document.getElementById('resultName').textContent = styled.name;
+                document.getElementById('resultPrice').textContent = styled.price !== undefined ? formatPrice(styled.price) : 'Not specified';
+                document.getElementById('resultDescription').textContent = styled.styledDescription;
+                document.getElementById('resultTemplate').textContent = styled.template;
+
+                document.getElementById('result').classList.add('show');
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

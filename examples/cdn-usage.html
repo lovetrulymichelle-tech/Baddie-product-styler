@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baddie Product Styler - CDN Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .example {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .result {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Baddie Product Styler - CDN Usage Example</h1>
+    
+    <div class="example">
+        <h2>How to Use</h2>
+        <p>This example shows how to use Baddie Product Styler directly in a web page without npm installation.</p>
+        <p><strong>Note:</strong> Once the package is published to npm, you can use a CDN like jsdelivr or unpkg. For now, this demonstrates the concept.</p>
+    </div>
+
+    <div class="example">
+        <h2>Future CDN Usage (After npm Publish)</h2>
+        <pre><code>&lt;script type="module"&gt;
+  // Import from CDN (example - replace with actual CDN URL)
+  import { styleMyProduct, formatPrice } from 'https://cdn.jsdelivr.net/npm/baddie-product-styler/dist/index.mjs';
+  
+  const product = {
+    name: 'Designer Handbag',
+    description: 'Authentic luxury item',
+    price: 450
+  };
+  
+  const styled = styleMyProduct(product, { template: 'modern' });
+  console.log(styled.styledDescription);
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <h2>Local Example (Works Now)</h2>
+        <p>Click the button to style a sample product:</p>
+        <button onclick="styleSampleProduct()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+            Style Product
+        </button>
+        <div id="output" class="result" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        // For this local example, we'll include the functions inline
+        // In production, these would be imported from CDN
+        
+        function styleMyProduct(product, options = {}) {
+            const defaultProduct = {
+                name: 'Sample Product',
+                description: 'A great product for resale',
+                price: 0,
+            };
+
+            const productToStyle = product || defaultProduct;
+            
+            if (!productToStyle.name || productToStyle.name.trim() === '') {
+                throw new Error('Product name is required and cannot be empty');
+            }
+            
+            if (productToStyle.price !== undefined && (productToStyle.price < 0 || !isFinite(productToStyle.price))) {
+                throw new Error('Product price must be a valid positive number');
+            }
+            
+            const template = options.template || 'modern';
+            let styledDescription = (productToStyle.description || '').trim();
+            
+            if (!styledDescription) {
+                styledDescription = 'Quality product available for purchase';
+            }
+
+            switch (template) {
+                case 'modern':
+                    styledDescription = `✨ ${styledDescription} ✨\n🔥 LIMITED AVAILABILITY 🔥\n💎 Premium Quality`;
+                    break;
+                case 'classic':
+                    styledDescription = `${styledDescription}\n\nClassic Quality | Trusted by Thousands`;
+                    break;
+                case 'minimal':
+                    styledDescription = `${styledDescription}\n\nSimple. Clean. Quality.`;
+                    break;
+                default:
+                    styledDescription = `✨ ${styledDescription} ✨\n🔥 LIMITED AVAILABILITY 🔥\n💎 Premium Quality`;
+            }
+
+            if (options.addBranding) {
+                styledDescription += '\n\n👑 Styled by Baddie Product Styler';
+            }
+
+            return {
+                ...productToStyle,
+                styledDescription,
+                template,
+            };
+        }
+
+        function formatPrice(price, currency = '$') {
+            if (typeof price !== 'number' || !isFinite(price)) {
+                throw new Error('Price must be a valid number');
+            }
+            
+            if (price < 0) {
+                throw new Error('Price cannot be negative');
+            }
+            
+            if (!currency || currency.trim() === '') {
+                currency = '$';
+            }
+            
+            return `${currency}${price.toFixed(2)}`;
+        }
+
+        // Make function available globally for button onclick
+        window.styleSampleProduct = function() {
+            const product = {
+                name: 'Vintage Designer Watch',
+                description: 'Rare collectible timepiece in mint condition',
+                price: 1299.99
+            };
+
+            const styled = styleMyProduct(product, { 
+                template: 'modern',
+                addBranding: true 
+            });
+
+            const output = document.getElementById('output');
+            output.style.display = 'block';
+            output.innerHTML = `
+<strong>Product Name:</strong> ${styled.name}
+<strong>Price:</strong> ${formatPrice(styled.price)}
+
+<strong>Styled Description:</strong>
+${styled.styledDescription}
+
+<strong>Template:</strong> ${styled.template}
+            `.trim();
+        };
+    </script>
+
+    <div class="example">
+        <h2>Benefits of CDN Usage</h2>
+        <ul>
+            <li>✅ No installation required</li>
+            <li>✅ Works in any modern browser</li>
+            <li>✅ Perfect for quick prototypes</li>
+            <li>✅ Always up-to-date with latest version</li>
+            <li>✅ Great for mobile web apps</li>
+            <li>✅ Can be used in Codepen, JSFiddle, etc.</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h2>Alternative CDN Options</h2>
+        <p>Once published to npm, the package will be available on multiple CDNs:</p>
+        <pre><code>// jsdelivr
+import { styleMyProduct } from 'https://cdn.jsdelivr.net/npm/baddie-product-styler@latest/dist/index.mjs';
+
+// unpkg
+import { styleMyProduct } from 'https://unpkg.com/baddie-product-styler@latest/dist/index.mjs';
+
+// esm.sh
+import { styleMyProduct } from 'https://esm.sh/baddie-product-styler';
+</code></pre>
+    </div>
+
+    <div class="example">
+        <h2>Mobile-Friendly Usage</h2>
+        <p>This approach works perfectly on mobile browsers! Users can:</p>
+        <ul>
+            <li>Open this page on their phone</li>
+            <li>Bookmark it for quick access</li>
+            <li>Use it anywhere without installing apps</li>
+            <li>Share the link with team members</li>
+        </ul>
+    </div>
+</body>
+</html>
