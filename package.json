@@ -25,9 +25,15 @@
     "product",
     "styler",
     "online-selling",
-    "automation"
+    "automation",
+    "mobile-friendly",
+    "ecommerce",
+    "product-description",
+    "poshmark",
+    "mercari",
+    "ebay"
   ],
-  "author": "",
+  "author": "Baddie Product Styler",
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.0.0",
