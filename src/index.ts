@@ -105,11 +105,11 @@ export function formatPrice(price: number, currency: string = '$'): string {
   }
   
   // Validate currency
-  if (!currency || currency.trim() === '') {
-    currency = '$';
-  }
+  const validatedCurrency = (!currency || currency.trim() === '') ? '$' : currency;
   
-  return `${currency}${price.toFixed(2)}`;
+  
+  
+  return `${validatedCurrency}${price.toFixed(2)}`;
 }
 
 // Default export
